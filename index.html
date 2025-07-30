@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Encryption/Decryption</title>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+      background-color: #282c34; /* Dark background for the body */
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .glass-container {
+      background: rgba(50, 50, 50, 0.8); /* Dark background with some transparency */
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      padding: 1rem; /* Reduced padding */
+      max-width: 400px; /* Reduced max-width */
+      margin: 3rem auto;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    textarea, input {
+      display: block;
+      margin: 1rem auto;
+      width: 80%;
+      max-width: 300px; /* Adjusted max-width for inputs */
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.2);
+      color: white;
+    }
+    button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      min-width: 120px;
+    }
+    button:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    h2 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #ffffff, #cccccc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    h3 {
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="glass-container">
+    <h2>Simple Encryption/Decryption</h2>
+    <textarea id="inputText" rows="4" placeholder="Enter text here..."></textarea>
+    <input type="number" id="shift" placeholder="Shift value (e.g. 3)" />
+    <button onclick="encryptText()">Encrypt</button>
+    <button onclick="decryptText()">Decrypt</button>
+    <h3>Output:</h3>
+    <textarea id="outputText" rows="4" readonly></textarea>
+  </div>
+
+  <script>
+    function encryptText() {
+      const text = document.getElementById('inputText').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      if (isNaN(shift)) {
+        alert("Please enter a valid number for shift.");
+        return;
+      }
+      const encrypted = caesarCipher(text, shift);
+      document.getElementById('outputText').value = encrypted;
+    }
+
+    function decryptText() {
+      const text = document.getElementById('inputText').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      if (isNaN(shift)) {
+        alert("Please enter a valid number for shift.");
+        return;
+      }
+      const decrypted = caesarCipher(text, -shift);
+      document.getElementById('outputText').value = decrypted;
+    }
+
+    function caesarCipher(text, shift) {
+      return text.split('').map(char => {
+        if (char.match(/[a-z]/i)) {
+          const code = char.charCodeAt();
+          const base = code >= 65 && code <= 90 ? 65 : 97;
+          return String.fromCharCode(((code - base + shift + 26) % 26) + base);
+        }
+        return char;
+      }).join('');
+    }
+
+    // Inline configuration for particles.js
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80 },
+        color: { value: '#ffffff' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#ffffff',
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 3
+        }
+      }
+    });
+  </script>
+</body>
+</html>
